@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlockTest", "FlockTest.csproj", "{35065FD7-E423-4A52-8B6B-E60E0833174C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35065FD7-E423-4A52-8B6B-E60E0833174C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35065FD7-E423-4A52-8B6B-E60E0833174C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35065FD7-E423-4A52-8B6B-E60E0833174C}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{35065FD7-E423-4A52-8B6B-E60E0833174C}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{35065FD7-E423-4A52-8B6B-E60E0833174C}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{35065FD7-E423-4A52-8B6B-E60E0833174C}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal

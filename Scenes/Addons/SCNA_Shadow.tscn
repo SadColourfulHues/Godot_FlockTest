@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dlblvsyp34l58"]
+
+[ext_resource type="Texture2D" uid="uid://bddm1rwfxkp3s" path="res://Assets/Sprites/flock_shadow.png" id="1_k8bk2"]
+
+[node name="Shadow" type="Sprite2D"]
+position = Vector2(0, 6)
+texture = ExtResource("1_k8bk2")
