@@ -23,4 +23,8 @@ public sealed partial class PlayerController
         _sprite.Play("walk");
         _sprite.FlipH = _smoothVelocity.X < 0;
     }
+
+    private void HandleActions()
+    {
+    }
 }
