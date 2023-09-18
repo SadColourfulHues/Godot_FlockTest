@@ -60,7 +60,7 @@ public sealed partial class MultiNodeManager<NodeType, DataType>
     {
         Debug.Assert(
             condition: index >= 0 && index < Capacity,
-            message: "MultiNodeManager: attempted to update invalid index!"
+            message: "MultiNodeManager: attempted to update an invalid index!"
         );
 
         _data[index] = data;
