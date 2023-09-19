@@ -18,7 +18,7 @@ public sealed partial class EnemySpawner : Marker2D
     private void Configure()
     {
         _spawnTimer = new() {
-            WaitTime = GD.RandRange(1.0f, 2.0f),
+            WaitTime = GD.RandRange(0.5f, 1.25f),
             OneShot = false
         };
 

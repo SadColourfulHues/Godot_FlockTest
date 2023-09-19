@@ -12,7 +12,7 @@ public sealed partial class EnemyManager
         _enemies.Update(data, idx);
     }
 
-    private async void DeathEffect(AnimatedSprite2D sprite)
+    private async void DeathEffect(AnimatedSprite2D sprite, int index)
     {
         Tween outTween = sprite.CreateTween();
 
@@ -24,7 +24,7 @@ public sealed partial class EnemyManager
         );
 
         await ToSignal(outTween, Tween.SignalName.Finished);
-        sprite.QueueFree();
+        _spritePool.Invalidate(index);
     }
 
     private static void Flash(AnimatedSprite2D sprite)

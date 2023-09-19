@@ -21,7 +21,7 @@ public sealed partial class BulletManager
         AddChild(sprite);
         _bullets.Append(sprite, data);
 
-        sprite.GlobalPosition = data.Position;
+        sprite.Position = data.Position;
     }
 
     private void OnUpdate(
@@ -34,12 +34,12 @@ public sealed partial class BulletManager
         // Will register their position into the enemy manager's
         // 'hurt spot' zones, which is reset per frame.
 
-        for (int i = 0; i < sprites.Length; ++i) {
+        for (int i = sprites.Length; i --> 0;) {
             if (bullets[i].Age < 0.1f) {
                 sprites[i].QueueFree();
                 _bullets.Remove(i);
 
-                return;
+                continue;
             }
 
             BulletData nextData = bullets[i];
@@ -47,9 +47,9 @@ public sealed partial class BulletManager
             nextData.Age -= delta;
 
             nextData.Position =
-                bullets[i].Position + bullets[i].Direction * 100.0f * delta;
+                bullets[i].Position + (bullets[i].Direction * 100.0f * delta);
 
-            sprites[i].GlobalPosition = nextData.Position;
+            sprites[i].Position = nextData.Position;
             _enemyManager.AppendHurtSpot(nextData.Position);
 
             _bullets.Update(nextData, i);

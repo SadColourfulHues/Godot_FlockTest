@@ -1,9 +1,9 @@
 namespace Game.Managers;
 
 [GlobalClass]
-public sealed partial class BulletManager: Node2D
+public sealed partial class BulletManager : Node2D
 {
-    private const int Capacity = 32;
+    private const int Capacity = 16;
 
     [Export]
     private Texture2D _bulletSprite;

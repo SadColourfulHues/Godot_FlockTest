@@ -7,6 +7,11 @@ public sealed partial class EnemyManager
         if (!_enemies.CanAppend())
             return;
 
+        AnimatedSprite2D sprite = _spritePool.Get(out int spriteIndex);
+
+        if (sprite == null)
+            return;
+
         // On a more serious project, I'll probably move these to a separate method
         // to make initialisation cleaner
 
@@ -14,26 +19,17 @@ public sealed partial class EnemyManager
             Position = position,
             Velocity = Vector2.Zero,
             SteerType = _randomGen.Randf() > 0.33f ? SteerType.Boring : SteerType.Bizarre,
-            Health = 10.0f
+            Health = 10.0f,
+
+            SpriteIndex = spriteIndex
         };
 
-        AnimatedSprite2D sprite = new() {
-            SpriteFrames = data.SteerType == SteerType.Boring ? _enemySprite : _enemySpriteAlt,
-            TextureFilter = CanvasItem.TextureFilterEnum.NearestWithMipmaps
-        };
+        sprite.SpriteFrames =
+            data.SteerType == SteerType.Boring ? _enemySprite : _enemySpriteAlt;
 
-        Sprite2D shadow = _pkgShadowSprite.Instantiate<Sprite2D>();
-        shadow.TextureFilter = CanvasItem.TextureFilterEnum.NearestWithMipmaps;
-
-        sprite.AddChild(shadow);
-
-        shadow.ShowBehindParent = true;
-        shadow.Position = new(0, 6);
-
-        AddChild(sprite);
         _enemies.Append(sprite, data);
 
-        sprite.GlobalPosition = position;
+        sprite.Position = position;
         sprite.Play();
 
         // Spawn fade
@@ -55,18 +51,18 @@ public sealed partial class EnemyManager
         ReadOnlySpan<EnemyData> enemies)
     {
         ReadOnlySpan<Vector2> hurtSpots = _hurtSpots;
-        Vector2 playerPosition = _focalPoint.GlobalPosition;
+        Vector2 playerPosition = _focalPoint.Position;
         Box playerBox = new(playerPosition.X, playerPosition.Y, 14, 8);
 
         Span<AgentInfo> neighbourBuffer = stackalloc AgentInfo[sprites.Length];
 
-        for (int i = 0; i < sprites.Length; ++i) {
+        for (int i = sprites.Length; i --> 0;) {
             if (enemies[i].Health < 0.1f) {
-                DeathEffect(sprites[i]);
+                DeathEffect(sprites[i], enemies[i].SpriteIndex);
                 _enemies.Remove(i);
 
                 EmitSignal(SignalName.OnEntityDeath);
-                return;
+                continue;
             }
 
             // Main entity 'tick' //
@@ -108,7 +104,7 @@ public sealed partial class EnemyManager
 
             // Finalisation
             sprites[i].FlipH = (playerPosition.X - enemies[i].Position.X) < 0.0f;
-            sprites[i].GlobalPosition = nextData.Position;
+            sprites[i].Position = nextData.Position;
 
             // Interactions //
 
@@ -139,6 +135,16 @@ public sealed partial class EnemyManager
         }
 
         ClearHurtSpots();
+    }
+
+    private void OnSpriteInit(AnimatedSprite2D sprite)
+    {
+        Sprite2D shadow = _pkgShadowSprite.Instantiate<Sprite2D>();
+
+        shadow.Position = new(0, 6);
+        shadow.ShowBehindParent = true;
+
+        sprite.AddChild(shadow);
     }
 
     private void ApplyDamageOnPlayerContact(

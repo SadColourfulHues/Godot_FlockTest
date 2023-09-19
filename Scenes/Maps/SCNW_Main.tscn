@@ -123,7 +123,6 @@ _pkgShadowSprite = ExtResource("6_pyoy6")
 _focalPoint = NodePath("../Player")
 
 [node name="BulletManager" type="Node2D" parent="Entities" node_paths=PackedStringArray("_enemyManager")]
-y_sort_enabled = true
 script = ExtResource("9_i5iaf")
 _bulletSprite = ExtResource("9_m5igk")
 _enemyManager = NodePath("../EnemyManager")
@@ -134,7 +133,7 @@ _bulletManager = NodePath("../BulletManager")
 
 [node name="Camera" type="Camera2D" parent="." node_paths=PackedStringArray("_subject")]
 position = Vector2(-218, 77)
-zoom = Vector2(4, 4)
+zoom = Vector2(5, 5)
 script = ExtResource("3_mo2yx")
 _subject = NodePath("../Entities/Player")
 

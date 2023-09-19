@@ -10,6 +10,8 @@ public sealed partial class EnemyManager
 
         public SteerType SteerType;
         public Vector2 Forces;
+
+        public int SpriteIndex;
     }
 
     private struct AgentInfo

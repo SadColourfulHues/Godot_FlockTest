@@ -1,14 +1,14 @@
 namespace Game.Managers;
 
 [GlobalClass]
-public sealed partial class EnemyManager: Node2D
+public sealed partial class EnemyManager : Node2D
 {
     [Signal]
     public delegate void OnEntityDeathEventHandler();
     public event Action<int> OnHurtzoneTouched;
 
-    private const int Capacity = 200;
-    private const int MaxHurtSpots = 32;
+    private const int Capacity = 380;
+    private const int MaxHurtSpots = 16;
 
     [Export]
     private SpriteFrames _enemySprite;
@@ -27,14 +27,18 @@ public sealed partial class EnemyManager: Node2D
 
     private readonly RandomNumberGenerator _randomGen;
     private readonly MultiNodeManager<AnimatedSprite2D, EnemyData> _enemies;
+    private readonly AnimatedSpritePool _spritePool;
 
     public EnemyManager()
     {
         _randomGen = new();
         _enemies = new(Capacity);
+        _spritePool = new AnimatedSpritePool(this, Capacity);
 
         _hurtSpots = new Vector2[MaxHurtSpots];
         _hurtSpotIdx = 0;
+
+        _spritePool.SpriteConfigurator = OnSpriteInit;
     }
 
     public override void _PhysicsProcess(double delta)
