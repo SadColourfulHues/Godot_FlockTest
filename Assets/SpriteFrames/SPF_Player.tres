@@ -1,0 +1,51 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3 uid="uid://q7djejsaqnyq"]
+
+[ext_resource type="Texture2D" uid="uid://b1vxpk2tpd7kg" path="res://Assets/Sprites/flock_player.png" id="1_jsc02"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_syawj"]
+atlas = ExtResource("1_jsc02")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xcdyj"]
+atlas = ExtResource("1_jsc02")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6s2b1"]
+atlas = ExtResource("1_jsc02")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fwlfy"]
+atlas = ExtResource("1_jsc02")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nv2n0"]
+atlas = ExtResource("1_jsc02")
+region = Rect2(64, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_syawj")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xcdyj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6s2b1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fwlfy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nv2n0")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]

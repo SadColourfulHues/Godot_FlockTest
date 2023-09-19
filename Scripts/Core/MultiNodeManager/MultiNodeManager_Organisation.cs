@@ -68,7 +68,7 @@ public sealed partial class MultiNodeManager<NodeType, DataType>
 
     private bool IsContinuous<T>(ReadOnlySpan<T> array, out int switchPoint)
     {
-        switchPoint = _nodes.Length;
+        switchPoint = Capacity;
 
         bool expected = false;
         bool enforcePattern = false;

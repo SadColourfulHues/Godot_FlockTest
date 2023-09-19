@@ -18,6 +18,7 @@ public sealed partial class EnemyManager
         Vector2 targetPosition,
 		ReadOnlySpan<AgentInfo> neighbours,
         int neighbourCount,
+        SteerType steerType,
 		float acceleration,
 		float maxVelocity)
 	{
@@ -49,8 +50,16 @@ public sealed partial class EnemyManager
         flockingDir += averageVelocity *= 0.2f;
         flockingDir *= velocity.Length();
 
-        targetPosition += (position - targetPosition).Normalized() * 16.0f;
-        Vector2 targetDir = (targetPosition - position).Normalized() * maxVelocity;
+        targetPosition += (position - targetPosition).Normalized() * 8.0f;
+        Vector2 targetDir = (targetPosition - position).Normalized();
+
+        if (steerType == SteerType.Bizarre) {
+            targetDir = targetDir.Rotated(45f);
+            targetDir *= maxVelocity * 2.0f;
+        }
+        else {
+            targetDir *= maxVelocity;
+        }
 
         targetDir += separation;
 

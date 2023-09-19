@@ -22,6 +22,11 @@ public sealed partial class MultiNodeManager<NodeType, DataType>
 
     #region Main Functions
 
+    public bool CanAppend()
+    {
+        return _count < Capacity;
+    }
+
     /// <summary>
     /// Try to append an object into the manager.
     /// </summary>
@@ -78,6 +83,16 @@ public sealed partial class MultiNodeManager<NodeType, DataType>
     public ReadOnlySpan<DataType> GetData()
     {
         return _data.AsSpan()[.._count];
+    }
+
+    public NodeType GetNodeAt(int index)
+    {
+        return _nodes[index];
+    }
+
+    public DataType GetDataAt(int index)
+    {
+        return _data[index];
     }
 
     #endregion

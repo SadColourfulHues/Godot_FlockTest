@@ -1,59 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://b0ts2r5jenfyu"]
+[gd_scene load_steps=6 format=3 uid="uid://b0ts2r5jenfyu"]
 
 [ext_resource type="Script" path="res://Scripts/Entities/Player/PlayerController.cs" id="1_025ho"]
 [ext_resource type="PackedScene" uid="uid://dlblvsyp34l58" path="res://Scenes/Addons/SCNA_Shadow.tscn" id="1_ag0on"]
-[ext_resource type="Texture2D" uid="uid://b1vxpk2tpd7kg" path="res://Assets/Sprites/flock_player.png" id="1_fmnge"]
+[ext_resource type="SpriteFrames" uid="uid://q7djejsaqnyq" path="res://Assets/SpriteFrames/SPF_Player.tres" id="4_f0yxw"]
 [ext_resource type="Script" path="res://Scripts/Behaviours/Damageable.cs" id="4_fwvn3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sohth"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_syawj"]
-atlas = ExtResource("1_fmnge")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xcdyj"]
-atlas = ExtResource("1_fmnge")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6s2b1"]
-atlas = ExtResource("1_fmnge")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fwlfy"]
-atlas = ExtResource("1_fmnge")
-region = Rect2(48, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nv2n0"]
-atlas = ExtResource("1_fmnge")
-region = Rect2(64, 0, 16, 16)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_udprx"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_syawj")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xcdyj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6s2b1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fwlfy")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nv2n0")
-}],
-"loop": true,
-"name": &"walk",
-"speed": 8.0
-}]
 
 [node name="Player" type="CharacterBody2D"]
 texture_filter = 3
@@ -69,6 +21,6 @@ shape = SubResource("CircleShape2D_sohth")
 scale = Vector2(1.3, 1.3)
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_udprx")
+sprite_frames = ExtResource("4_f0yxw")
 animation = &"walk"
 frame_progress = 0.31801

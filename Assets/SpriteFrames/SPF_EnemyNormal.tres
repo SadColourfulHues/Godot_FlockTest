@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://ka3cp7dwitvp"]
+
+[ext_resource type="Texture2D" uid="uid://dbi3f3put470i" path="res://Assets/Sprites/flock_enemy.png" id="1_vhtey"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qg4uw"]
+atlas = ExtResource("1_vhtey")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ty160"]
+atlas = ExtResource("1_vhtey")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t4cr1"]
+atlas = ExtResource("1_vhtey")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lr13c"]
+atlas = ExtResource("1_vhtey")
+region = Rect2(64, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qg4uw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ty160")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t4cr1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lr13c")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.5
+}]
