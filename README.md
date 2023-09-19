@@ -3,7 +3,7 @@ This project is created as a little playground for me to practise implementing f
 
 
 
-https://github.com/SadColourfulHues/Godot_FlockTest/assets/46611929/4a627039-d828-44c5-aa3c-014a90cd4223
+https://github.com/SadColourfulHues/Godot_FlockTest/assets/46611929/feb846f2-44b2-4b23-b9bb-a78fae775bf6
 
 
 
