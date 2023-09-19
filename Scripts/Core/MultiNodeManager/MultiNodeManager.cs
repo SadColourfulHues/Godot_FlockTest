@@ -75,6 +75,11 @@ public sealed partial class MultiNodeManager<NodeType, DataType>
 
     #region Getters
 
+    public int GetCount()
+    {
+        return _count;
+    }
+
     public ReadOnlySpan<NodeType> GetNodes()
     {
         return _nodes.AsSpan()[.._count];

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cl67j1c3c7641"]
+[gd_scene load_steps=21 format=3 uid="uid://cl67j1c3c7641"]
 
 [ext_resource type="Texture2D" uid="uid://yc6a7l6qdr61" path="res://Assets/Sprites/flock_tile.png" id="1_l2h3m"]
 [ext_resource type="PackedScene" uid="uid://b0ts2r5jenfyu" path="res://Scenes/Entities/SCNE_Player.tscn" id="2_7asny"]
@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://dlblvsyp34l58" path="res://Scenes/Addons/SCNA_Shadow.tscn" id="6_pyoy6"]
 [ext_resource type="Script" path="res://Scripts/Objects/EnemySpawner.cs" id="7_n8w4d"]
 [ext_resource type="Script" path="res://Scripts/UI/ScoreTracker.gd" id="9_a013t"]
+[ext_resource type="Script" path="res://Scripts/Managers/BulletManager/BulletManager.cs" id="9_i5iaf"]
+[ext_resource type="Texture2D" uid="uid://qjr54xjn6wxy" path="res://Assets/Sprites/flock_bullet.png" id="9_m5igk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v611c"]
 texture = ExtResource("1_l2h3m")
@@ -80,37 +82,32 @@ shape = SubResource("WorldBoundaryShape2D_pvs37")
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="EnemySpawner" type="Marker2D" parent="SpawnPoints" node_paths=PackedStringArray("_manager")]
-position = Vector2(-462, 49)
+position = Vector2(-464, 50)
 script = ExtResource("7_n8w4d")
 _manager = NodePath("../../Entities/EnemyManager")
 
 [node name="EnemySpawner2" type="Marker2D" parent="SpawnPoints" node_paths=PackedStringArray("_manager")]
-position = Vector2(-213, -63)
+position = Vector2(-205, -46)
 script = ExtResource("7_n8w4d")
 _manager = NodePath("../../Entities/EnemyManager")
 
 [node name="EnemySpawner3" type="Marker2D" parent="SpawnPoints" node_paths=PackedStringArray("_manager")]
-position = Vector2(-274, 174)
+position = Vector2(-274, 172)
 script = ExtResource("7_n8w4d")
 _manager = NodePath("../../Entities/EnemyManager")
 
 [node name="EnemySpawner4" type="Marker2D" parent="SpawnPoints" node_paths=PackedStringArray("_manager")]
-position = Vector2(-9, 62)
+position = Vector2(-18, 52)
 script = ExtResource("7_n8w4d")
 _manager = NodePath("../../Entities/EnemyManager")
 
 [node name="EnemySpawner5" type="Marker2D" parent="SpawnPoints" node_paths=PackedStringArray("_manager")]
-position = Vector2(-58, 134)
+position = Vector2(-312, -8)
 script = ExtResource("7_n8w4d")
 _manager = NodePath("../../Entities/EnemyManager")
 
 [node name="EnemySpawner6" type="Marker2D" parent="SpawnPoints" node_paths=PackedStringArray("_manager")]
-position = Vector2(-325, -18)
-script = ExtResource("7_n8w4d")
-_manager = NodePath("../../Entities/EnemyManager")
-
-[node name="EnemySpawner7" type="Marker2D" parent="SpawnPoints" node_paths=PackedStringArray("_manager")]
-position = Vector2(-218, 138)
+position = Vector2(-57, 141)
 script = ExtResource("7_n8w4d")
 _manager = NodePath("../../Entities/EnemyManager")
 
@@ -125,8 +122,15 @@ _enemySpriteAlt = ExtResource("6_pmmmc")
 _pkgShadowSprite = ExtResource("6_pyoy6")
 _focalPoint = NodePath("../Player")
 
-[node name="Player" parent="Entities" instance=ExtResource("2_7asny")]
+[node name="BulletManager" type="Node2D" parent="Entities" node_paths=PackedStringArray("_enemyManager")]
+y_sort_enabled = true
+script = ExtResource("9_i5iaf")
+_bulletSprite = ExtResource("9_m5igk")
+_enemyManager = NodePath("../EnemyManager")
+
+[node name="Player" parent="Entities" node_paths=PackedStringArray("_bulletManager") instance=ExtResource("2_7asny")]
 position = Vector2(-216, 76)
+_bulletManager = NodePath("../BulletManager")
 
 [node name="Camera" type="Camera2D" parent="." node_paths=PackedStringArray("_subject")]
 position = Vector2(-218, 77)

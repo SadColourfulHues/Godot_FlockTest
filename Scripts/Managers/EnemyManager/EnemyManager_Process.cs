@@ -35,6 +35,18 @@ public sealed partial class EnemyManager
 
         sprite.GlobalPosition = position;
         sprite.Play();
+
+        // Spawn fade
+        sprite.Modulate = Colors.Transparent;
+
+        Tween inTween = sprite.CreateTween();
+
+        inTween.TweenProperty(
+            @object: sprite,
+            property: CanvasItem.PropertyName.Modulate.ToString(),
+            finalVal: Colors.White,
+            0.5f
+        );
     }
 
     private void OnUpdate(
@@ -42,21 +54,29 @@ public sealed partial class EnemyManager
         ReadOnlySpan<AnimatedSprite2D> sprites,
         ReadOnlySpan<EnemyData> enemies)
     {
+        ReadOnlySpan<Vector2> hurtSpots = _hurtSpots;
         Vector2 playerPosition = _focalPoint.GlobalPosition;
+        Box playerBox = new(playerPosition.X, playerPosition.Y, 14, 8);
+
         Span<AgentInfo> neighbourBuffer = stackalloc AgentInfo[sprites.Length];
 
         for (int i = 0; i < sprites.Length; ++i) {
-            if (enemies[i].Health <= 1f) {
-                sprites[i].QueueFree();
+            if (enemies[i].Health < 0.1f) {
+                DeathEffect(sprites[i]);
                 _enemies.Remove(i);
 
                 EmitSignal(SignalName.OnEntityDeath);
                 return;
             }
 
-            // Main process
+            // Main entity 'tick' //
+
             EnemyData nextData = enemies[i];
 
+            Box box = GetBoxForEntity(nextData.Position);
+            Vector2 nextVelocity = enemies[i].Velocity;
+
+            // Steering
             ReadOnlySpan<AgentInfo> neighbours = GetNeighbours(
                 position: nextData.Position,
                 enemies: enemies,
@@ -64,8 +84,6 @@ public sealed partial class EnemyManager
                 excludeIndex: i,
                 count: out int neighbourCount
             );
-
-            Vector2 nextVelocity = enemies[i].Velocity;
 
             ProcessFlocking(
                 velocity: ref nextVelocity,
@@ -80,7 +98,7 @@ public sealed partial class EnemyManager
 
             nextData.Velocity = nextVelocity;
 
-            // Apply forces
+            // Forces
             nextVelocity += nextData.Forces * delta;
 
             nextData.Position.X += nextVelocity.X * delta;
@@ -88,11 +106,53 @@ public sealed partial class EnemyManager
 
             nextData.Forces = nextData.Forces.Lerp(Vector2.Zero, 0.12f);
 
-            // Finalise update
+            // Finalisation
             sprites[i].FlipH = (playerPosition.X - enemies[i].Position.X) < 0.0f;
             sprites[i].GlobalPosition = nextData.Position;
 
+            // Interactions //
+
+            ApplyDamageOnPlayerContact(
+                entityBox: box,
+                playerBox: playerBox,
+                sprite: sprites[i],
+                data: ref nextData
+            );
+
+            // Bullet collision
+            for (int j = 0; j < _hurtSpotIdx; ++j) {
+                Vector2 hurtSpotPosition = hurtSpots[j];
+                Box hurtbox = new(hurtSpotPosition.X, hurtSpotPosition.Y, 16, 16);
+
+                if (!hurtbox.IsTouching(box))
+                    continue;
+
+                Knockback(ref nextData, hurtSpotPosition, 80f);
+                TakeDamage(ref nextData, 2);
+                Flash(sprites[i]);
+
+                OnHurtzoneTouched?.Invoke(j);
+                break;
+            }
+
             _enemies.Update(nextData, i);
         }
+
+        ClearHurtSpots();
+    }
+
+    private void ApplyDamageOnPlayerContact(
+        Box entityBox,
+        Box playerBox,
+        AnimatedSprite2D sprite,
+        ref EnemyData data)
+    {
+        if (!playerBox.IsTouching(entityBox))
+            return;
+
+        TakeDamage(ref data, 1f);
+        Knockback(ref data, playerBox.GetPosition(), 500f);
+
+        Flash(sprite);
     }
 }

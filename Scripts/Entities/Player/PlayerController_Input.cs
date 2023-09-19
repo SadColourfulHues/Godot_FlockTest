@@ -26,5 +26,18 @@ public sealed partial class PlayerController
 
     private void HandleActions()
     {
+        if (Input.IsActionJustPressed("shoot") &&
+            _shootCooldown <= 0.0f)
+        {
+            Vector2 position = GlobalPosition;
+
+            _bulletManager.Spawn(position, Vector2.Left.Rotated(_shootAngle));
+            _bulletManager.Spawn(position, Vector2.Right.Rotated(_shootAngle));
+            _bulletManager.Spawn(position, Vector2.Up.Rotated(_shootAngle));
+            _bulletManager.Spawn(position, Vector2.Down.Rotated(_shootAngle));
+
+            _shootCooldown = ShootCooldown;
+            _shootAngle = (_shootAngle + 45.0f) % 360f;
+        }
     }
 }

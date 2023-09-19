@@ -2,6 +2,26 @@ namespace Game.Managers;
 
 public sealed partial class EnemyManager
 {
+    public bool AppendHurtSpot(Vector2 hurtspot)
+    {
+        if (_hurtSpotIdx >= MaxHurtSpots)
+            return false;
+
+        _hurtSpots[_hurtSpotIdx] = hurtspot;
+        _hurtSpotIdx ++;
+
+        return true;
+    }
+
+    private void ClearHurtSpots()
+    {
+        for (int i = 0; i < MaxHurtSpots; ++i) {
+            _hurtSpots[i] = default;
+        }
+
+        _hurtSpotIdx = 0;
+    }
+
     private static Box GetBoxForEntity(Vector2 position)
     {
         return new(position.X, position.Y, 16, 14);

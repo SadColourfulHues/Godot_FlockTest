@@ -22,8 +22,17 @@ public sealed partial class EnemyManager
 		float acceleration,
 		float maxVelocity)
 	{
-		if (neighbourCount < 1)
+        // If it has no neighbours, move towards the player, regardless of their movement type
+		if (neighbourCount < 1) {
+            velocity = GetSteeringForce(
+                current: velocity,
+                target: (targetPosition - position).Normalized() * maxVelocity,
+                acceleration: acceleration,
+                maxVelocity: maxVelocity
+            );
+
 			return;
+        }
 
         Vector2 averageVelocity = Vector2.Zero;
 		Vector2 averagePosition = Vector2.Zero;

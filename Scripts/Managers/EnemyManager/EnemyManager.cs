@@ -5,8 +5,10 @@ public sealed partial class EnemyManager: Node2D
 {
     [Signal]
     public delegate void OnEntityDeathEventHandler();
+    public event Action<int> OnHurtzoneTouched;
 
     private const int Capacity = 200;
+    private const int MaxHurtSpots = 32;
 
     [Export]
     private SpriteFrames _enemySprite;
@@ -20,6 +22,9 @@ public sealed partial class EnemyManager: Node2D
     [Export]
     private Node2D _focalPoint;
 
+    private readonly Vector2[] _hurtSpots;
+    private int _hurtSpotIdx;
+
     private readonly RandomNumberGenerator _randomGen;
     private readonly MultiNodeManager<AnimatedSprite2D, EnemyData> _enemies;
 
@@ -27,27 +32,9 @@ public sealed partial class EnemyManager: Node2D
     {
         _randomGen = new();
         _enemies = new(Capacity);
-    }
 
-    public override void _Process(double delta)
-    {
-        Vector2 playerPosition = _focalPoint.GlobalPosition;
-
-        if (!IsTouching(playerPosition, out int touchIdx))
-            return;
-
-        // Damage and push back entities upon colliding with the player
-
-        if (touchIdx == -1)
-            return;
-
-        EnemyData data = _enemies.GetDataAt(touchIdx);
-
-        TakeDamage(ref data, 1f);
-        Knockback(ref data, playerPosition, 500f);
-
-        Flash(_enemies.GetNodeAt(touchIdx));
-        _enemies.Update(data, touchIdx);
+        _hurtSpots = new Vector2[MaxHurtSpots];
+        _hurtSpotIdx = 0;
     }
 
     public override void _PhysicsProcess(double delta)
