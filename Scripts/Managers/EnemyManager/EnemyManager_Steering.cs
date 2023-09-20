@@ -91,12 +91,18 @@ public sealed partial class EnemyManager
         int excludeIndex,
         out int count)
     {
+        const int MaxNeighbours = 32;
+
         const float DistanceThreshold = 40.0f;
         const float MinDistance = DistanceThreshold * DistanceThreshold;
 
         int neighbourIdx = 0;
+        int neighbourUpperLimit = Math.Min(buffer.Length, MaxNeighbours);
 
         for (int i = 0; i < buffer.Length; ++i) {
+            if (neighbourIdx >= neighbourUpperLimit)
+                break;
+
             if (i == excludeIndex)
                 continue;
 

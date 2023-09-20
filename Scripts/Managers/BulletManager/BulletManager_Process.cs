@@ -7,21 +7,18 @@ public sealed partial class BulletManager
         if (!_bullets.CanAppend())
             return;
 
-        Sprite2D sprite = new() {
-            Texture = _bulletSprite,
-            TextureFilter = CanvasItem.TextureFilterEnum.Nearest
-        };
+        Sprite2D sprite = _spritePool.Get(out int spriteIndex);
 
         BulletData data = new() {
-            Age = 2.0f,
+            Age = 1.0f,
             Position = position,
-            Direction = dir
+            Direction = dir,
+
+            SpriteIndex = spriteIndex
         };
 
-        AddChild(sprite);
         _bullets.Append(sprite, data);
-
-        sprite.GlobalPosition = data.Position;
+        sprite.Position = data.Position;
     }
 
     private void OnUpdate(
@@ -34,12 +31,12 @@ public sealed partial class BulletManager
         // Will register their position into the enemy manager's
         // 'hurt spot' zones, which is reset per frame.
 
-        for (int i = 0; i < sprites.Length; ++i) {
+        for (int i = sprites.Length; i --> 0;) {
             if (bullets[i].Age < 0.1f) {
-                sprites[i].QueueFree();
+                _spritePool.Invalidate(bullets[i].SpriteIndex);
                 _bullets.Remove(i);
 
-                return;
+                continue;
             }
 
             BulletData nextData = bullets[i];
@@ -47,12 +44,17 @@ public sealed partial class BulletManager
             nextData.Age -= delta;
 
             nextData.Position =
-                bullets[i].Position + bullets[i].Direction * 100.0f * delta;
+                bullets[i].Position + (bullets[i].Direction * 100.0f * delta);
 
-            sprites[i].GlobalPosition = nextData.Position;
+            sprites[i].Position = nextData.Position;
             _enemyManager.AppendHurtSpot(nextData.Position);
 
             _bullets.Update(nextData, i);
         }
+    }
+
+    void OnSpriteInit(Sprite2D sprite)
+    {
+        sprite.Texture = _bulletSprite;
     }
 }

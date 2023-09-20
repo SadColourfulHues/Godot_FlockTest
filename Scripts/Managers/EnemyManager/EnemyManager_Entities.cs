@@ -7,12 +7,12 @@ public sealed partial class EnemyManager
         EnemyData data = _enemies.GetDataAt(idx);
         TakeDamage(ref data, damage);
 
-        Flash(_enemies.GetNodeAt(idx));
+        VisualSyncFlash(_enemies.GetNodeAt(idx));
 
         _enemies.Update(data, idx);
     }
 
-    private async void DeathEffect(AnimatedSprite2D sprite)
+    private async void DeathEffect(AnimatedSprite2D sprite, int index)
     {
         Tween outTween = sprite.CreateTween();
 
@@ -24,27 +24,7 @@ public sealed partial class EnemyManager
         );
 
         await ToSignal(outTween, Tween.SignalName.Finished);
-        sprite.QueueFree();
-    }
-
-    private static void Flash(AnimatedSprite2D sprite)
-    {
-        Tween tween = sprite.CreateTween();
-        sprite.Modulate = Colors.White;
-
-        tween.TweenProperty(
-            @object: sprite,
-            property: CanvasItem.PropertyName.Modulate.ToString(),
-            finalVal: Colors.Red,
-            0.1f
-        );
-
-        tween.TweenProperty(
-            @object: sprite,
-            property: CanvasItem.PropertyName.Modulate.ToString(),
-            finalVal: Colors.White,
-            0.15f
-        );
+        _spritePool.Invalidate(index);
     }
 
     private static void TakeDamage(ref EnemyData data, float damage)
