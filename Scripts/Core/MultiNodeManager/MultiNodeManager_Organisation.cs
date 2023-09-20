@@ -75,8 +75,7 @@ public sealed partial class MultiNodeManager<NodeType, DataType>
         bool expected = false;
         bool enforcePattern = false;
 
-        for (int i = 0; i < array.Length; ++i)
-        {
+        for (int i = 0; i < array.Length; ++i) {
             bool isNull = array[i] is null;
 
             if (isNull == expected)

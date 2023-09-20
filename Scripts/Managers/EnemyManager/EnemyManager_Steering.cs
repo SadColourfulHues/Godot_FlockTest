@@ -48,11 +48,11 @@ public sealed partial class EnemyManager
             averageVelocity += neighbours[i].Velocity;
 		}
 
-        float normalise = 1.0f / neighbourCount;
+        float averageFac = 1.0f / neighbourCount;
 
-        averageVelocity *= normalise;
-		averagePosition *= normalise;
-        separation *= normalise;
+        averageVelocity *= averageFac;
+		averagePosition *= averageFac;
+        separation *= averageFac;
 
         // Calculate updated direction
         Vector2 flockingDir = (averagePosition - position).Normalized();
