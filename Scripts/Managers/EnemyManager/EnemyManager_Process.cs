@@ -1,3 +1,5 @@
+using Game.Entities;
+
 namespace Game.Managers;
 
 public sealed partial class EnemyManager
@@ -24,25 +26,13 @@ public sealed partial class EnemyManager
             SpriteIndex = spriteIndex
         };
 
-        sprite.SpriteFrames =
-            data.SteerType == SteerType.Boring ? _enemySprite : _enemySpriteAlt;
+        VisualSyncSpawn(
+            sprite: sprite,
+            frames: data.SteerType == SteerType.Boring ? _enemySprite : _enemySpriteAlt,
+            position: position
+        );
 
         _enemies.Append(sprite, data);
-
-        sprite.Position = position;
-        sprite.Play();
-
-        // Spawn fade
-        sprite.Modulate = Colors.Transparent;
-
-        Tween inTween = sprite.CreateTween();
-
-        inTween.TweenProperty(
-            @object: sprite,
-            property: CanvasItem.PropertyName.Modulate.ToString(),
-            finalVal: Colors.White,
-            0.5f
-        );
     }
 
     private void OnUpdate(
@@ -68,8 +58,6 @@ public sealed partial class EnemyManager
             // Main entity 'tick' //
 
             EnemyData nextData = enemies[i];
-
-            Box box = GetBoxForEntity(nextData.Position);
             Vector2 nextVelocity = enemies[i].Velocity;
 
             // Steering
@@ -103,8 +91,13 @@ public sealed partial class EnemyManager
             nextData.Forces = nextData.Forces.Lerp(Vector2.Zero, 0.12f);
 
             // Finalisation
-            sprites[i].FlipH = (playerPosition.X - enemies[i].Position.X) < 0.0f;
-            sprites[i].Position = nextData.Position;
+            Box box = GetBoxForEntity(nextData.Position);
+
+            VisualSyncUpdateData(
+                sprite: sprites[i],
+                position: nextData.Position,
+                flipped: (playerPosition.X - enemies[i].Position.X) < 0.0f
+            );
 
             // Interactions //
 
@@ -118,14 +111,14 @@ public sealed partial class EnemyManager
             // Bullet collision
             for (int j = 0; j < _hurtSpotIdx; ++j) {
                 Vector2 hurtSpotPosition = hurtSpots[j];
-                Box hurtbox = new(hurtSpotPosition.X, hurtSpotPosition.Y, 16, 16);
+                Box hurtbox = new(hurtSpotPosition.X + 4, hurtSpotPosition.Y + 4, 8, 8);
 
                 if (!hurtbox.IsTouching(box))
                     continue;
 
                 Knockback(ref nextData, hurtSpotPosition, 80f);
-                TakeDamage(ref nextData, 2);
-                Flash(sprites[i]);
+                TakeDamage(ref nextData, 1f);
+                VisualSyncFlash(sprites[i]);
 
                 OnHurtzoneTouched?.Invoke(j);
                 break;
@@ -156,9 +149,10 @@ public sealed partial class EnemyManager
         if (!playerBox.IsTouching(entityBox))
             return;
 
-        TakeDamage(ref data, 1f);
-        Knockback(ref data, playerBox.GetPosition(), 500f);
+        TakeDamage(ref data, 0.33f);
+        Knockback(ref data, playerBox.GetPosition(), 300f);
 
-        Flash(sprite);
+        VisualSyncFlash(sprite);
+        PlayerCamera.Shake(0.1f);
     }
 }

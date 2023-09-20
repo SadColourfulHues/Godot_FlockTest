@@ -7,8 +7,8 @@ public sealed partial class EnemyManager : Node2D
     public delegate void OnEntityDeathEventHandler();
     public event Action<int> OnHurtzoneTouched;
 
-    private const int Capacity = 380;
-    private const int MaxHurtSpots = 16;
+    private const int Capacity = 512;
+    private const int MaxHurtSpots = 24;
 
     [Export]
     private SpriteFrames _enemySprite;
@@ -18,6 +18,9 @@ public sealed partial class EnemyManager : Node2D
 
     [Export]
     private PackedScene _pkgShadowSprite;
+
+    [Export]
+    private Resource _visualSyncDelegate;
 
     [Export]
     private Node2D _focalPoint;
@@ -33,7 +36,7 @@ public sealed partial class EnemyManager : Node2D
     {
         _randomGen = new();
         _enemies = new(Capacity);
-        _spritePool = new AnimatedSpritePool(this, Capacity);
+        _spritePool = new(this, Capacity);
 
         _hurtSpots = new Vector2[MaxHurtSpots];
         _hurtSpotIdx = 0;

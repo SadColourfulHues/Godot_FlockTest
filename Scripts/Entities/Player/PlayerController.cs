@@ -4,7 +4,7 @@ namespace Game.Entities;
 
 public sealed partial class PlayerController : CharacterBody2D
 {
-    private const float ShootCooldown = 0.33f;
+    private const float ShootCooldown = 0.1f;
 
     [Export]
     private float _moveSpeed = 8.0f;
@@ -22,6 +22,7 @@ public sealed partial class PlayerController : CharacterBody2D
     public override void _Ready()
     {
         this.GetNodes();
+        SetProcess(false);
 
         _shootCooldown = 0.0f;
         _shootAngle = 0.0f;
@@ -41,9 +42,13 @@ public sealed partial class PlayerController : CharacterBody2D
         HandleActions();
     }
 
+    public override void _Process(double delta)
+    {
+        FireProjectiles((float) delta);
+    }
+
     public override void _PhysicsProcess(double delta)
     {
-        _shootCooldown = Mathf.Max(0.0f, _shootCooldown - (float) delta);
         HandleMotionInput();
 
         // Adapt to isometric's 2:1 ratio

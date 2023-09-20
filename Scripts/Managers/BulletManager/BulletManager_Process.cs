@@ -7,20 +7,17 @@ public sealed partial class BulletManager
         if (!_bullets.CanAppend())
             return;
 
-        Sprite2D sprite = new() {
-            Texture = _bulletSprite,
-            TextureFilter = CanvasItem.TextureFilterEnum.Nearest
-        };
+        Sprite2D sprite = _spritePool.Get(out int spriteIndex);
 
         BulletData data = new() {
-            Age = 2.0f,
+            Age = 1.0f,
             Position = position,
-            Direction = dir
+            Direction = dir,
+
+            SpriteIndex = spriteIndex
         };
 
-        AddChild(sprite);
         _bullets.Append(sprite, data);
-
         sprite.Position = data.Position;
     }
 
@@ -36,7 +33,7 @@ public sealed partial class BulletManager
 
         for (int i = sprites.Length; i --> 0;) {
             if (bullets[i].Age < 0.1f) {
-                sprites[i].QueueFree();
+                _spritePool.Invalidate(bullets[i].SpriteIndex);
                 _bullets.Remove(i);
 
                 continue;
@@ -54,5 +51,10 @@ public sealed partial class BulletManager
 
             _bullets.Update(nextData, i);
         }
+    }
+
+    void OnSpriteInit(Sprite2D sprite)
+    {
+        sprite.Texture = _bulletSprite;
     }
 }
